@@ -1,0 +1,39 @@
+# Personal settings for the Cosmos theme.
+# Theme defaults live in themes/cosmos/_config.yml.
+home:
+  mode: cover
+  title: Write the future with code
+  aside: help the world with creativity.
+
+footer:
+  enabled: true
+
+about:
+  header: true
+  title: About
+  aside: ME!
+  introduction: 我是 ClassIsBand，一个初二生，喜欢写一些有意思的小东西。
+  file: _content/about.md
+  profile:
+    enabled: true
+    name: ClassIsBand
+    avatar: /images/avatar.jpg
+    avatar_alt: ClassIsBand 的头像
+    facts:
+      - { label: 在做, value: StickyHomeworks2 · N }
+      - { label: 常用, value: C# / .NET / Vue / Rust }
+      - { label: 系统, value: Windows 11 / Arch Linux }
+    email: 2441500679@qq.com
+    contacts:
+      - { label: GitHub, url: 'https://github.com/belugaQAQ' }
+      - { label: QQ, value: '2441500679' }
+      - { label: 邮箱, value: 'tb20121013@outlook.com' }
+
+pages:
+  tags: false
+
+custom:
+  css:
+    - /css/m3e-theme.css
+  js:
+    - /js/m3e-color.js

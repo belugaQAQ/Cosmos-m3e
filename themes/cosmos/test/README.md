@@ -1,0 +1,31 @@
+# Theme Tests
+
+[English](README.md) · [简体中文](README.zh-CN.md)
+
+## Overview
+
+Real temporary Hexo sites verify theme behavior. Temporary fixtures are removed after each test.
+
+`npm test` uses Node's built-in test discovery without shell glob expansion, including on Windows with Node.js 20.
+
+## Main Interfaces / Implementations
+
+| Name | Kind | Description |
+| --- | --- | --- |
+| integration.test.cjs | Build tests | Routes, content, override precedence, subdirectories, localization, switches, empty states, About HTML, and exclusion of both module-guide editions while preserving site-owned README pages in both languages. |
+| settings.test.cjs | Unit tests | Array replacement, URL safety, paths, and serialized script content. |
+| documentation.test.cjs | Support checks | Markdown links/anchors, translation pairing with an English-only agent-guide exception, English defaults, direct topic links, user-document boundaries, configuration schema, and CI runtime targets. |
+| reference.test.cjs | Reference regression tests | Runs the reference tool in temporary fixtures with LF/CRLF/mixed line endings; checks read-only validation, detection of stale documents/schema/defaults, and LF regeneration. |
+| screenshots/ | Visual evidence | Desktop/mobile captures of category navigation, article content, code spacing, copy alignment, and motion feedback. |
+
+`npm run check:package` separately installs a real packed archive in a fresh site. `COSMOS_HEXO_VERSION` selects the Hexo version for that installation test. This network-dependent check is separate from the regular test suite.
+
+For listing category navigation, generate posts in Commentaries, Investment, Life, and Reading, then inspect desktop and 320–390px mobile widths. All links must remain visible without horizontal scrolling, with search below the wrapped rows on mobile. Also check many categories, long unbroken names, Chinese labels, keyboard focus, the selected category, disabled search, reduced motion, and JavaScript-disabled navigation. `screenshots/category-wrap-desktop.png` and `screenshots/category-wrap-mobile.png` record the issue #6 fix.
+
+For marked-line spacing, verify an 8px gap after the 2px accent rule, aligned code starts, preserved indentation, and unchanged copied text at desktop/mobile widths. Check long lines, hidden line numbers, disabled copying, and reading without JavaScript. `screenshots/code-mark-spacing-desktop.png` and `screenshots/code-mark-spacing-mobile.png` record the spacing fix in a generated Hexo article.
+
+Article regressions cover untitled posts across metadata, listings, adjacent links, and search, including post-language and label overrides. Gallery cases cross the real Hexo front-matter parser and verify URL escaping, rejected schemes, ordering, empty lists, legacy `photo`, and subdirectory roots. Inspect `.line.marked` in a browser when changing code-highlight styles; generated markup alone cannot verify the highlight color or copy behavior.
+
+For code-copy changes, inspect Highlight.js and Prism blocks at desktop/mobile widths, including long first lines, single-line snippets, captions, marked lines, and localized labels. Verify horizontal scrolling leaves the button in place, keyboard focus and arrow-key scrolling work, and copying preserves code text without line numbers. Also check clipboard failure feedback, disabled copying, JavaScript-disabled reading, and print output.
+
+For motion changes, inspect first-visit and repeat cover entry, real cross-document title/indicator transitions, surviving and new search results, rapid menu reversal, Escape focus restoration, keyboard copy/menu activation, native disclosures, and heading targets. Repeat with `motion.enabled: false`, `motion.page_transitions: false`, reduced motion, and JavaScript disabled. `screenshots/motion-desktop.png` captures copy feedback and the current contents rule; `screenshots/motion-mobile.png` captures the navigation wipe and the menu lines meeting before they cross. These paused frames document appearance; live interactions verify timing, interruption, and final states. Clipboard tests use a stub so they do not overwrite the user's clipboard.

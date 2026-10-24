@@ -1,0 +1,26 @@
+# Theme Assets
+
+[English](README.md) · [简体中文](README.zh-CN.md)
+
+## Overview
+
+Static public assets with no personal content or remote runtime dependency.
+
+Listing category links wrap onto additional rows at narrow widths instead of requiring horizontal scrolling. Long category names wrap within the available width; links retain their 44px minimum height, current-page marker, and keyboard focus outline without JavaScript.
+
+Marked code lines extend their background and 2px accent rule 10px into the existing left padding. Matching inner padding preserves code alignment and leaves an 8px gap between the rule and the code, including at mobile widths.
+
+Both language editions of this module guide are excluded from the installation archive and generated blog assets. Site-authored README pages remain eligible for publication.
+
+Code blocks use balanced vertical padding. When copying is enabled, `main.js` places the copy button beside a keyboard-focusable scrolling region, aligned with the first code line. Highlight.js and Prism-style `pre` blocks share this layout, with captions spanning both columns. Long lines scroll without moving or covering the button. Without JavaScript or with copying disabled, code retains the full width; print output removes the button column.
+
+Motion extends the existing easing tokens in `style.css`: first-visit cover entry, travelling page indicators, contents rules and anchor highlights, reversible mobile navigation, native disclosure transitions, and directional pointer feedback. `main.js` keeps surviving search entries while animating their positions and adds rolling copy labels, a check, and a honey wash. Repeat interactions retarget or cancel previous motion. Keyboard menu/copy activation is immediate; closed mobile links are inert. `motion.enabled: false` disables all theme-added motion, and `motion.page_transitions: false` disables only cross-document transitions. All effects honor the system's reduced-motion preference, with native fallbacks for unsupported CSS. Cover visits are scoped to the tab and site root.
+
+## Main Interfaces / Implementations
+
+| Name | Kind | Description |
+| --- | --- | --- |
+| css/style.css | Stylesheet | Editorial layout, typography, responsive photo galleries, marked code lines, CSS variable hooks, and responsive states. |
+| js/main.js | Browser script | Localized navigation, search reconciliation, reading progress, code-copy feedback, and cover visit tracking. |
+| js/transitions.js | Browser script | Progressive shared article-title page transitions. |
+| fonts/ | Assets | Self-hosted fonts and their licenses. |

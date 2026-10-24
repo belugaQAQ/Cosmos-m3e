@@ -1,0 +1,145 @@
+<%
+const c = cosmos();
+const cover = page.journal_home === true;
+const aboutPage = page.layout === 'about' || page.cosmos_kind === 'about';
+const title = cover ? config.title : `${is_post() ? entry_title(page) : page.title || (page.posts ? cosmos_listing_title() : config.title)} — ${config.title}`;
+const description = page.description || (is_post() ? excerpt_text(page) : config.description);
+const showHeader = !cover || c.home.header;
+const showFooter = c.footer.enabled && (!cover || c.home.footer);
+const brand = c.brand.title || config.title;
+%>
+<!DOCTYPE html>
+<html lang="<%= cosmos_language() %>" class="<%= c.motion.enabled ? '' : 'no-motion' %>">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title><%= title %></title>
+  <meta name="description" content="<%= description %>">
+  <meta name="theme-color" content="<%= m3e_color() %>">
+  <% if (page.noindex || c.seo.noindex) { %><meta name="robots" content="noindex,follow"><% } %>
+  <meta property="og:title" content="<%= title %>">
+  <meta property="og:description" content="<%= description %>">
+  <meta property="og:type" content="<%= is_post() ? 'article' : 'website' %>">
+  <meta property="og:site_name" content="<%= config.title %>">
+  <meta property="og:url" content="<%= full_url_for(page.path || '') %>">
+  <% if (page.cover || c.seo.image) { %><meta property="og:image" content="<%= full_url_for(page.cover || c.seo.image) %>"><% } %>
+  <% if (is_post()) { %><meta property="article:published_time" content="<%= date_xml(page.date) %>"><% if (page.updated) { %><meta property="article:modified_time" content="<%= date_xml(page.updated) %>"><% } } %>
+  <meta name="twitter:card" content="<%= c.seo.twitter_card %>">
+  <link rel="canonical" href="<%= full_url_for(page.path || '') %>">
+  <% if (cosmos_url(c.brand.favicon)) { %><link rel="icon" href="<%= cosmos_url(c.brand.favicon) %>"><% } %>
+  <% if (cosmos_url(c.seo.rss)) { %><link rel="alternate" type="application/atom+xml" title="<%= config.title %>" href="<%= cosmos_url(c.seo.rss) %>"><% } %>
+  <% if (c.style.fonts.preload) { %>
+  <link rel="preload" href="<%= url_for('/fonts/hanken.woff2') %>" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="<%= url_for('/fonts/petrona-italic.woff2') %>" as="font" type="font/woff2" crossorigin>
+  <% } %>
+  <link rel="stylesheet" href="<%= url_for('/css/style.css') %>">
+  <% if (cover && c.motion.enabled) { %>
+  <script>try{if(!sessionStorage.getItem('cosmos-visited:'+<%- cosmos_json(url_for('/')) %>)&&!matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.classList.add('cover-enter')}catch{}</script>
+  <% } %>
+  <style><%- cosmos_css() %></style>
+  <% for (const src of c.custom.css || []) { if (cosmos_url(src)) { %><link rel="stylesheet" href="<%= cosmos_url(src) %>"><% } } %>
+  <script type="importmap"><%- m3e_importmap() %></script>
+  <script>
+    (() => {
+      const media = matchMedia('(prefers-color-scheme: dark)');
+      const entries = <%- cosmos_json(m3e_entries()) %>;
+      const seed = <%- cosmos_json({ version: m3e_version(), color: m3e_color(), variant: m3e_variant(), contrast: m3e_contrast() }) %>;
+      try {
+        const chosen = localStorage.getItem('m3e.pref.color');
+        if (/^#[0-9a-f]{6}$/i.test(chosen || '')) seed.color = chosen.toUpperCase();
+        const variant = localStorage.getItem('m3e.pref.variant');
+        if (/^[a-z-]+$/.test(variant || '')) seed.variant = variant;
+      } catch {}
+      const key = scheme => `m3e:${seed.version}:s2:${scheme}:${seed.color}:${seed.variant}:${seed.contrast}`;
+      window.m3eKey = key;
+      window.m3eSeed = seed;
+      let cache = null;
+      function apply(scheme) {
+        let colors;
+        try { colors = JSON.parse(localStorage.getItem(key(scheme)) || 'null'); } catch { return false; }
+        if (!colors) return false;
+        const declarations = Object.entries(colors)
+          .filter(([name, value]) => /^--md-sys-color-[a-z-]+$/.test(name) && /^#[0-9a-f]{6}$/i.test(value))
+          .map(([name, value]) => `${name}:${value}`).join(';');
+        if (!declarations) return false;
+        cache ??= Object.assign(document.createElement('style'), { id: 'm3e-color-cache' });
+        cache.textContent = `html{${declarations}}`;
+        if (!cache.isConnected) document.head.append(cache);
+        return true;
+      }
+      const loads = {};
+      function load(name = 'theme') {
+        loads[name] ??= import(entries[name]).then(() => true, () => false);
+        return loads[name];
+      }
+      const current = () => media.matches ? 'dark' : 'light';
+      window.m3eLoad = load;
+      if (!apply(current())) load();
+      media.addEventListener('change', () => { if (!apply(current())) load(); });
+    })();
+  </script>
+  <% if (c.motion.enabled && c.motion.page_transitions) { %>
+  <style>@view-transition{navigation:auto}</style>
+  <script src="<%= url_for('/js/transitions.js') %>"></script>
+  <% } %>
+  <script type="application/json" id="cosmos-settings"><%- cosmos_json(cosmos_client()) %></script>
+  <script defer src="<%= url_for('/js/main.js') %>"></script>
+  <%- c.custom.head %>
+</head>
+<body class="<%= cover ? 'is-home' : is_post() ? 'is-post' : aboutPage ? 'is-about' : 'is-index' %>" data-root="<%= url_for('/') %>" data-blog="<%= cosmos_route('blog') %>" data-copy-code="<%= is_post() ? cosmos_post().copy_code : c.post.copy_code %>">
+  <m3e-theme color="<%= m3e_color() %>" variant="<%= m3e_variant() %>" contrast="<%= m3e_contrast() %>" scheme="auto" motion="expressive" strong-focus>
+    <script>if(window.m3eSeed){const t=document.currentScript.parentElement;t.setAttribute('color',window.m3eSeed.color);t.setAttribute('variant',window.m3eSeed.variant)}</script>
+    <%- c.custom.body_start %>
+    <a class="skip-link" href="#main"><%= cx('skip_content') %></a>
+    <% if (showHeader) { %><%- partial('_partial/header') %><% } %>
+    <main id="main" tabindex="-1"><%- c.custom.before_content %><%- body %><%- c.custom.after_content %></main>
+    <% if (showFooter) { %><%- partial('_partial/footer') %><% } %>
+    <%- c.custom.body_end %>
+    <% for (const src of c.custom.js || []) { if (cosmos_url(src)) { %><script type="module" src="<%= cosmos_url(src) %>"></script><% } } %>
+  <script>
+    (() => {
+      const keyFor = window.m3eKey;
+      const seed = window.m3eSeed;
+      if (!keyFor || !seed) return;
+      const theme = document.querySelector('m3e-theme');
+      // Registered color tokens serialize as rgb(), unregistered ones as hex; store hex either way.
+      const toHex = value => {
+        const rgb = /^rgba?\(\s*(\d+)[,\s]+(\d+)[,\s]+(\d+)/.exec(value);
+        if (rgb) return '#' + rgb.slice(1, 4).map(channel => Number(channel).toString(16).padStart(2, '0')).join('');
+        return /^#[0-9a-f]{6}$/i.test(value) ? value : null;
+      };
+      const capture = () => {
+        const colors = {};
+        const computed = getComputedStyle(document.documentElement);
+        for (const name of ['primary','on-primary','primary-container','on-primary-container','secondary','on-secondary','secondary-container','on-secondary-container','tertiary','on-tertiary','tertiary-container','on-tertiary-container','error','on-error','error-container','on-error-container','surface','background','on-background','on-surface','on-surface-variant','surface-container-low','surface-container','surface-container-high','outline','outline-variant','inverse-surface','inverse-on-surface','inverse-primary']) {
+          const value = toHex(computed.getPropertyValue(`--md-sys-color-${name}`).trim());
+          if (value) colors[`--md-sys-color-${name}`] = value;
+        }
+        try {
+          localStorage.setItem(keyFor(matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'), JSON.stringify(colors));
+          const stale = [];
+          for (let index = 0; index < localStorage.length; index++) {
+            const name = localStorage.key(index);
+            if (name?.startsWith('m3e:') && !name.startsWith(`m3e:${seed.version}:s2:`)) stale.push(name);
+          }
+          stale.forEach(name => localStorage.removeItem(name));
+        } catch {}
+        document.getElementById('m3e-color-cache')?.remove();
+      };
+      // While the palette transition runs, computed values are interpolated; store the settled set instead.
+      const saveColors = () => {
+        const root = document.documentElement;
+        const raw = getComputedStyle(root).getPropertyValue('--m3e-morph-duration').trim();
+        const morph = raw.endsWith('ms') ? parseFloat(raw) : parseFloat(raw) * 1000;
+        if (root.classList.contains('m3e-morph')) setTimeout(capture, (Number.isFinite(morph) ? morph : 0) + 120);
+        else capture();
+      };
+      customElements.whenDefined('m3e-theme').then(() => {
+        theme?.addEventListener('change', saveColors);
+        theme?.updateComplete?.then(saveColors);
+      });
+    })();
+  </script>
+  </m3e-theme>
+</body>
+</html>

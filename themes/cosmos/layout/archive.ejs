@@ -1,0 +1,36 @@
+<% if (page.year || page.month) { %>
+<%- partial('index') %>
+<% } else {
+  const c = cosmos();
+  const l = c.listing;
+  const years = new Map();
+  site.posts.sort('-date').forEach(post => {
+    const year = post.date.year();
+    if (!years.has(year)) years.set(year, []);
+    years.get(year).push(post);
+  });
+  const tags = site.tags.sort('name').filter(tag => tag.length);
+%>
+<section class="index-page shell without-listing-aside archive-page">
+  <header class="index-heading"><h1><%= cosmos_listing_title() %><% if (l.title_period) { %><span class="small-dot">.</span><% } %></h1></header>
+  <div class="index-tools">
+    <nav class="topic-nav" aria-label="<%= cx('filter_topics') %>" data-archive-tags>
+      <a href="#all" data-tag="" aria-current="page"><%= l.title || cx('all_writing') %><% if (l.counts) { %> <span><%= site.posts.length %></span><% } %></a>
+      <% tags.forEach(tag => { %><a href="#tag-<%= encodeURIComponent(tag.name) %>" data-tag="<%= tag.name %>"><%= tag.name %><% if (l.counts) { %> <span><%= tag.length %></span><% } %></a><% }) %>
+    </nav>
+    <form class="search-form" role="search" data-archive-search><label for="archive-search" class="sr-only"><%= cx('search') %></label><%- icon('search') %><input id="archive-search" type="search" placeholder="<%= cx('search_placeholder') %>" autocomplete="off"><button class="clear-search" type="button" aria-label="<%= cx('clear_search') %>" hidden><%- icon('close') %></button></form>
+  </div>
+  <div class="archive-years" data-archive-list>
+    <% years.forEach((posts, year) => { %>
+    <section class="archive-year" aria-labelledby="year-<%= year %>">
+      <h2 class="archive-year-title" id="year-<%= year %>"><%= year %><span class="archive-year-count"><%= posts.length %></span></h2>
+      <div class="entries">
+        <% posts.forEach(post => { %><div class="archive-entry" data-tags="<%= post.tags.map(tag => tag.name).join(' ') %>"><%- partial('_partial/entry',{post}) %></div><% }) %>
+      </div>
+    </section>
+    <% }) %>
+  </div>
+  <p class="archive-status" role="status" hidden></p>
+  <% if (l.signoff) { %><p class="index-signoff"><%= l.signoff %></p><% } %>
+</section>
+<% } %>

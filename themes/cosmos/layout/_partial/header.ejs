@@ -1,0 +1,41 @@
+<%
+const c = cosmos();
+const brand = c.brand.title || config.title;
+const aside = c.brand.aside;
+const lead = aside && brand.endsWith(aside) ? brand.slice(0,-aside.length).trimEnd() : brand;
+const links = cosmos_links(c.navigation);
+%>
+<header class="site-header shell">
+  <a class="brand" href="<%= cosmos_route('home') %>" aria-label="<%= brand %> — <%= cx('home') %>"><span class="brand-title"><span><%= lead %></span><% if (aside) { %> <em><%= aside %></em><% } %></span></a>
+  <div class="header-actions">
+    <nav id="site-nav" class="site-nav" aria-label="<%= cx('main_navigation') %>">
+      <% links.forEach(link => { %><a href="<%= link.href %>" <%- cosmos_active(link) ? 'aria-current="page"' : '' %>><%= link.label %></a><% }) %>
+    </nav>
+    <% if (c.search.enabled) { %><a class="icon-control" href="<%= cosmos_route('blog') %>#search" aria-label="<%= cx('search') %>"><%- icon('search') %></a><% } %>
+    <button class="icon-control color-toggle" type="button" aria-haspopup="dialog" aria-label="配色">
+      <svg class="icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.2c3.4 4.1 5.8 7.1 5.8 9.8a5.8 5.8 0 0 1-11.6 0c0-2.7 2.4-5.7 5.8-9.8Z"/><path d="M9.4 13.6a2.6 2.6 0 0 0 2.6 2.6"/></svg>
+    </button>
+    <% if (links.length) { %><button class="icon-control menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="<%= cx('open_navigation') %>"><svg class="icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path class="menu-line menu-line-top" d="M4 8h16"/><path class="menu-line menu-line-bottom" d="M4 16h16"/></svg></button><% } %>
+  </div>
+  <m3e-dialog class="color-dialog">
+    <span slot="header" class="color-head">
+      <span class="color-heading">配色</span>
+      <button class="color-close" type="button" aria-label="关闭"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12M6 18 18 6"/></svg></button>
+    </span>
+    <div class="color-picker">
+      <p class="color-picker-title">Material, Just For You</p>
+      <div class="color-picker-row" role="group" aria-label="配色">
+        <% [['#6750A4','紫'],['#0061A4','蓝'],['#006A6A','青'],['#3E6837','绿'],['#8B5000','橙'],['#B3261E','红'],['#7D5260','粉'],['#4A4458','灰']].forEach(([value, name]) => { %><button class="color-swatch" type="button" data-color="<%= value %>" aria-label="<%= name %>" aria-pressed="false" style="--swatch:<%= value %>"></button><% }) %>
+                <label class="color-swatch color-custom" aria-label="自定义颜色">
+          <input type="color" value="#6750a4">
+          <svg class="color-custom-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M5.6 7.8 7.9 4h3.1l1.7 3.8v7.6H5.6Z"/><path d="M6.2 12.1h7.9v3.3H6.2Z" fill="currentColor" stroke="none"/><path d="M18.2 9.6c1.2 1.6 1.8 2.6 1.8 3.4a1.9 1.9 0 0 1-3.8 0c0-.8.6-1.8 1.8-3.4Z" fill="currentColor" stroke="none"/><rect x="5.6" y="19.2" width="12.8" height="1.9" rx="0.95" fill="currentColor" stroke="none"/></svg>
+          <span class="color-custom-fill" aria-hidden="true"></span>
+        </label>
+      </div>
+      <div class="color-variants" role="radiogroup" aria-label="配色风格">
+        <% [['vibrant','Vibrant'],['expressive','Expressive'],['fidelity','Fidelity'],['tonal-spot','Tonal Spot'],['content','Content'],['neutral','Neutral'],['monochrome','Monochrome'],['rainbow','Rainbow'],['fruit-salad','Fruit Salad']].forEach(([value, name]) => { %><button class="color-variant" type="button" role="radio" aria-checked="false" data-variant="<%= value %>"><%= name %></button><% }) %>
+      </div>
+      <p class="color-picker-error" hidden>配色组件没能加载，刷新页面再试一次。</p>
+    </div>
+  </m3e-dialog>
+</header>

@@ -1,0 +1,349 @@
+/* Static MD3 baseline tokens prevent a flash before the local M3E runtime upgrades. */
+html {
+  color-scheme: light dark;
+  --md-sys-color-primary: #6750A4;
+  --md-sys-color-on-primary: #FFFFFF;
+  --md-sys-color-primary-container: #EADDFF;
+  --md-sys-color-on-primary-container: #21005D;
+  --md-sys-color-secondary: #625B71;
+  --md-sys-color-on-secondary: #FFFFFF;
+  --md-sys-color-secondary-container: #E8DEF8;
+  --md-sys-color-on-secondary-container: #1D192B;
+  --md-sys-color-tertiary: #7D5260;
+  --md-sys-color-on-tertiary: #FFFFFF;
+  --md-sys-color-tertiary-container: #FFD8E4;
+  --md-sys-color-on-tertiary-container: #31111D;
+  --md-sys-color-error: #B3261E;
+  --md-sys-color-on-error: #FFFFFF;
+  --md-sys-color-error-container: #F9DEDC;
+  --md-sys-color-on-error-container: #410E0B;
+  --md-sys-color-surface: #FEF7FF;
+  --md-sys-color-background: #FEF7FF;
+  --md-sys-color-on-background: #1D1B20;
+  --md-sys-color-on-surface: #1D1B20;
+  --md-sys-color-on-surface-variant: #49454F;
+  --md-sys-color-surface-container-low: #F7F2FA;
+  --md-sys-color-surface-container: #F3EDF7;
+  --md-sys-color-surface-container-high: #ECE6F0;
+  --md-sys-color-outline: #79747E;
+  --md-sys-color-outline-variant: #CAC4D0;
+  --md-sys-color-inverse-surface: #322F35;
+  --md-sys-color-inverse-on-surface: #F5EFF7;
+  --md-sys-color-inverse-primary: #D0BCFF;
+}
+
+@media (prefers-color-scheme: dark) {
+  html {
+    --md-sys-color-primary: #D0BCFF;
+    --md-sys-color-on-primary: #381E72;
+    --md-sys-color-primary-container: #4F378B;
+    --md-sys-color-on-primary-container: #EADDFF;
+    --md-sys-color-secondary: #CCC2DC;
+    --md-sys-color-on-secondary: #332D41;
+    --md-sys-color-secondary-container: #4A4458;
+    --md-sys-color-on-secondary-container: #E8DEF8;
+    --md-sys-color-tertiary: #EFB8C8;
+    --md-sys-color-on-tertiary: #492532;
+    --md-sys-color-tertiary-container: #633B48;
+    --md-sys-color-on-tertiary-container: #FFD8E4;
+    --md-sys-color-error: #F2B8B5;
+    --md-sys-color-on-error: #601410;
+    --md-sys-color-error-container: #8C1D18;
+    --md-sys-color-on-error-container: #F9DEDC;
+    --md-sys-color-surface: #141218;
+    --md-sys-color-background: #141218;
+    --md-sys-color-on-background: #E6E0E9;
+    --md-sys-color-on-surface: #E6E0E9;
+    --md-sys-color-on-surface-variant: #CAC4D0;
+    --md-sys-color-surface-container-low: #1D1B20;
+    --md-sys-color-surface-container: #211F26;
+    --md-sys-color-surface-container-high: #2B2930;
+    --md-sys-color-outline: #938F99;
+    --md-sys-color-outline-variant: #49454F;
+    --md-sys-color-inverse-surface: #E6E0E9;
+    --md-sys-color-inverse-on-surface: #313033;
+    --md-sys-color-inverse-primary: #6750A4;
+  }
+}
+
+html {
+  background: var(--md-sys-color-surface);
+  scrollbar-color: var(--md-sys-color-on-surface-variant) var(--md-sys-color-surface);
+}
+
+m3e-theme {
+  background: var(--md-sys-color-surface);
+  color: var(--md-sys-color-on-surface);
+}
+
+/* The runtime writes MD3 body typography onto <body>; Cosmos keeps its own reading rhythm. */
+body {
+  font-size: 16px !important;
+  font-weight: 400 !important;
+  line-height: 1.65 !important;
+  letter-spacing: normal !important;
+}
+
+::selection {
+  background: var(--md-sys-color-secondary-container);
+  color: var(--md-sys-color-on-secondary-container);
+}
+
+@media (forced-colors: active) {
+  m3e-theme { forced-color-adjust: none; }
+}
+
+/* Header color picker */
+.color-toggle .icon { width: 21px; height: 21px; }
+
+/* The dialog keeps its own header element, so the title and close button live in that slot. */
+.color-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; margin-block: -10px; }
+.color-heading { font-weight: 600; }
+.color-close { display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; color: var(--md-sys-color-on-surface-variant); }
+.color-close:hover { background: var(--md-sys-color-surface-container-high); color: var(--md-sys-color-on-surface); }
+.color-close svg { width: 16px; height: 16px; }
+
+/* Square dialog keeps the editorial grid; the shape token is M3E's own override. */
+/* Bind M3E component tokens to the palette this site actually maintains. */
+.color-dialog {
+  --m3e-dialog-shape: 0;
+  --m3e-dialog-min-width: min(364px, calc(100vw - 32px));
+  --m3e-dialog-max-width: min(448px, calc(100vw - 32px));
+  --m3e-dialog-container-color: var(--md-sys-color-surface-container-low);
+  --m3e-dialog-header-container-color: var(--md-sys-color-surface-container-low);
+  --m3e-dialog-color: var(--md-sys-color-on-surface);
+  --m3e-dialog-header-color: var(--md-sys-color-on-surface);
+  --m3e-dialog-content-color: var(--md-sys-color-on-surface-variant);
+}
+.color-toggle:hover { color: var(--md-sys-color-primary); }
+
+/* Bottom padding gives the selection ring room; the dialog content clips its own edges. */
+.color-picker { display: grid; gap: 14px; padding-block: 14px 12px; }
+
+/* Before the runtime defines it, m3e-dialog is a plain unknown element; keep its light DOM out of the page. */
+m3e-dialog:not(:defined):not(.is-fallback) { display: none; }
+
+.color-dialog.is-fallback {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 60;
+  display: block;
+  width: min(380px, calc(100vw - 32px));
+  padding: 22px;
+  border: 1px solid var(--md-sys-color-outline-variant);
+  background: var(--md-sys-color-surface-container-low);
+  box-shadow: 0 18px 48px color-mix(in srgb, var(--md-sys-color-on-surface) 24%, transparent);
+}
+
+.color-dialog.is-fallback .color-picker-title { display: none; }
+.color-dialog.is-fallback .color-picker-row { display: none; }
+.color-picker-error { margin: 0; font-size: 13px; line-height: 1.6; color: var(--md-sys-color-error); }
+
+.color-picker-title { margin: 0; font-size: 12px; line-height: 1.5; color: var(--md-sys-color-on-surface-variant); }
+
+.color-picker-row { display: flex; align-items: center; gap: 6px; width: 100%; justify-content: space-between; }
+
+.color-swatch {
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: var(--swatch);
+  border: 1px solid var(--md-sys-color-outline);
+}
+/* Hover must not resize the swatch: a ring keeps the row height fixed. */
+.color-swatch:hover { outline: 2px solid color-mix(in srgb, var(--md-sys-color-on-surface) 40%, transparent); outline-offset: 2px; }
+.color-swatch[aria-pressed="true"] { outline: 2px solid var(--md-sys-color-on-surface); outline-offset: 2px; }
+
+/* Custom entry: icon by default, solid fill once the visitor picks a colour. */
+.color-custom {
+  position: relative;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  cursor: pointer;
+  background: none;
+  color: var(--md-sys-color-on-surface-variant);
+}
+.color-custom input { position: absolute; inset: 0; width: 100%; height: 100%; padding: 0; border: 0; opacity: 0; cursor: pointer; }
+.color-custom .color-custom-icon { width: 14px; height: 14px; }
+.color-custom .color-custom-fill { display: none; position: absolute; inset: 0; border-radius: inherit; background: var(--swatch); }
+.color-custom.has-color { border-color: transparent; }
+.color-custom.has-color .color-custom-icon { visibility: hidden; }
+.color-custom.has-color .color-custom-fill { display: block; }
+
+/* Theme variant chips. */
+.color-variants { display: flex; flex-wrap: wrap; gap: 8px; }
+.color-variant {
+  min-height: 34px;
+  padding: 0 12px;
+  border: 1px solid var(--md-sys-color-outline-variant);
+  font-size: 12px;
+  line-height: 1;
+  color: var(--md-sys-color-on-surface-variant);
+  transition: background 150ms, color 150ms, border-color 150ms;
+}
+.color-variant:hover { border-color: var(--md-sys-color-outline); color: var(--md-sys-color-on-surface); }
+.color-variant[aria-checked="true"] {
+  background: var(--md-sys-color-secondary-container);
+  border-color: transparent;
+  color: var(--md-sys-color-on-secondary-container);
+}
+
+/* Animate palette swaps instead of hard-cutting. */
+@property --md-sys-color-primary { syntax: '<color>'; inherits: true; initial-value: #6750A4; }
+@property --md-sys-color-on-primary { syntax: '<color>'; inherits: true; initial-value: #FFFFFF; }
+@property --md-sys-color-primary-container { syntax: '<color>'; inherits: true; initial-value: #EADDFF; }
+@property --md-sys-color-on-primary-container { syntax: '<color>'; inherits: true; initial-value: #21005D; }
+@property --md-sys-color-secondary-container { syntax: '<color>'; inherits: true; initial-value: #E8DEF8; }
+@property --md-sys-color-on-secondary-container { syntax: '<color>'; inherits: true; initial-value: #1D192B; }
+@property --md-sys-color-tertiary { syntax: '<color>'; inherits: true; initial-value: #7D5260; }
+@property --md-sys-color-surface { syntax: '<color>'; inherits: true; initial-value: #FEF7FF; }
+@property --md-sys-color-background { syntax: '<color>'; inherits: true; initial-value: #FEF7FF; }
+@property --md-sys-color-on-background { syntax: '<color>'; inherits: true; initial-value: #1D1B20; }
+@property --md-sys-color-on-surface { syntax: '<color>'; inherits: true; initial-value: #1D1B20; }
+@property --md-sys-color-on-surface-variant { syntax: '<color>'; inherits: true; initial-value: #49454F; }
+@property --md-sys-color-surface-container-low { syntax: '<color>'; inherits: true; initial-value: #F7F2FA; }
+@property --md-sys-color-outline { syntax: '<color>'; inherits: true; initial-value: #79747E; }
+@property --md-sys-color-outline-variant { syntax: '<color>'; inherits: true; initial-value: #CAC4D0; }
+
+html { --m3e-morph-duration: 1000ms; }
+
+html.m3e-morph {
+  transition-property: --md-sys-color-primary, --md-sys-color-on-primary, --md-sys-color-primary-container,
+    --md-sys-color-on-primary-container, --md-sys-color-secondary-container, --md-sys-color-on-secondary-container,
+    --md-sys-color-tertiary, --md-sys-color-surface, --md-sys-color-background, --md-sys-color-on-background,
+    --md-sys-color-on-surface, --md-sys-color-on-surface-variant,
+    --md-sys-color-surface-container-low, --md-sys-color-outline, --md-sys-color-outline-variant;
+  transition-duration: var(--m3e-morph-duration);
+  transition-timing-function: cubic-bezier(.4, 0, .2, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.m3e-morph { transition: none; }
+}
+
+/* Cosmos aliases must follow the animated tokens frame by frame. */
+@property --paper { syntax: '<color>'; inherits: true; initial-value: #FEF7FF; }
+@property --paper-low { syntax: '<color>'; inherits: true; initial-value: #F7F2FA; }
+@property --ink { syntax: '<color>'; inherits: true; initial-value: #1D1B20; }
+@property --muted { syntax: '<color>'; inherits: true; initial-value: #49454F; }
+@property --accent { syntax: '<color>'; inherits: true; initial-value: #6750A4; }
+@property --honey { syntax: '<color>'; inherits: true; initial-value: #E8DEF8; }
+@property --rule { syntax: '<color>'; inherits: true; initial-value: #CAC4D0; }
+
+/* GitHub alerts render through m3e-callout; only layout is ours. */
+/* The theme nudges link arrows 3px right on hover; keep that inside the sticky sidebar. */
+.profile-contact-row { padding-inline-end: 4px; }
+
+.prose m3e-callout { display: block; margin: 28px 0; }
+.prose m3e-callout svg[slot="icon"] { width: 18px; height: 18px; flex: none; }
+.prose m3e-callout p { margin: 0; font: inherit; }
+.prose m3e-callout p + p { margin-top: 10px; }
+
+/* While the module is in flight the raw markup holds the box and a ring covers it. */
+.prose m3e-callout:not(:defined) {
+  --callout-bg: var(--md-sys-color-surface-container);
+  position: relative;
+  padding: 12px 16px;
+  background: var(--callout-bg);
+}
+.prose m3e-callout:not(:defined).callout-tip { --callout-bg: var(--md-sys-color-secondary-container); }
+.prose m3e-callout:not(:defined).callout-important { --callout-bg: var(--md-sys-color-primary-container); }
+.prose m3e-callout:not(:defined).callout-warning { --callout-bg: var(--md-sys-color-tertiary-container); }
+.prose m3e-callout:not(:defined).callout-caution { --callout-bg: var(--md-sys-color-error-container); }
+.prose m3e-callout:not(:defined) { font-size: 16px; line-height: 24px; }
+.prose m3e-callout:not(:defined) [slot="label"] { display: block; margin: 0 0 16px; }
+.prose m3e-callout:not(:defined) svg[slot="icon"] { display: none; }
+.prose m3e-callout:not(:defined) > * { visibility: hidden; }
+.prose m3e-callout:not(:defined)::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--md-sys-color-outline-variant);
+  border-top-color: var(--md-sys-color-primary);
+  border-radius: 50%;
+  animation: callout-spin 700ms linear infinite;
+}
+@keyframes callout-spin { to { rotate: 360deg; } }
+@media (prefers-reduced-motion: reduce) {
+  .prose m3e-callout:not(:defined)::after { animation: none; }
+}
+
+
+
+/* Highlight sweeps in when it scrolls into view; without the script it stays solid. */
+html.highlight-motion .prose mark {
+  /* The theme paints mark with the background shorthand; clear it so only the sweep shows. */
+  background-color: transparent;
+  background-image: linear-gradient(var(--md-sys-color-secondary-container), var(--md-sys-color-secondary-container));
+  background-repeat: no-repeat;
+  background-position: left center;
+  background-size: 0% 100%;
+  color: var(--md-sys-color-on-surface);
+  transition: background-size 620ms cubic-bezier(.4, 0, .2, 1);
+}
+html.highlight-motion .prose mark.is-shown { background-size: 100% 100%; }
+@media (prefers-reduced-motion: reduce) {
+  html.highlight-motion .prose mark { background-size: 100% 100%; transition: none; }
+}
+
+/* KaTeX display blocks and Mermaid diagrams. */
+.prose .katex-display { margin: 26px 0; overflow-x: auto; overflow-y: hidden; padding-block: 2px; }
+.prose .mermaid { display: flex; justify-content: center; margin: 28px 0; visibility: hidden; }
+.prose .mermaid[data-processed] { visibility: visible; }
+.prose .mermaid svg { max-width: 100%; height: auto; }
+
+
+
+
+/* Tag chips animate their underline instead of popping it in. */
+[data-archive-tags] a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 1px;
+  height: 2px;
+  background: var(--md-sys-color-primary);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 260ms cubic-bezier(.16, 1, .3, 1);
+}
+[data-archive-tags] a[aria-current]::after { transform: scaleX(1); }
+
+@media (prefers-reduced-motion: reduce) {
+  [data-archive-tags] a::after { transition: none; }
+}
+
+/* Archive: year sections with tag filtering. */
+.archive-years { display: grid; gap: 40px; padding-top: 26px; }
+.archive-year-title {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin: 0 0 4px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--md-sys-color-outline-variant);
+  font-size: 27px;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+}
+.archive-year-count { font-size: 12px; font-weight: 400; color: var(--md-sys-color-on-surface-variant); font-variant-numeric: tabular-nums; }
+.archive-entry[hidden], .archive-year[hidden] { display: none; }
+/* Each entry is the only child of its wrapper, so the theme's :first-child reset would strip all top padding. */
+.archive-entry .entry { padding-top: 29px; }
+.archive-status { margin: 32px 0 0; font-size: 15px; color: var(--md-sys-color-on-surface-variant); }
+
+
+/* Tags sit in the article meta row. */
+.entry-meta .entry-tags { display: inline-flex; flex-wrap: wrap; gap: 10px; position: relative; z-index: 2; }
+.entry-meta .entry-tags a { color: var(--md-sys-color-on-surface-variant); transition: color 160ms; }
+.entry-meta .entry-tags a:hover { color: var(--md-sys-color-primary); }
